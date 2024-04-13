@@ -64,7 +64,7 @@ app.get("/:shortCode", async (req, res) => {
   const { shortCode } = req.params;
   try {
     const url = await URL.findOne({
-      shortUrl: `https://make-it-easyy.vercel.app/${shortCode}`,
+      shortUrl: `https://make-it-easyy/${shortCode}`,
     });
     if (!url) {
       return res.status(404).json({ error: "URL not found" });
