@@ -62,6 +62,18 @@ app.post("/shorten", async (req, res) => {
 
 app.get("/:shortCode", async (req, res) => {
   const { shortCode } = req.params;
+  try {
+    const url = await URL.findOne({
+      shortUrl: `https://make-it-easyy.vercel.app/${shortCode}`,
+    });
+    if (!url) {
+      return res.status(404).json({ error: "URL not found" });
+    }
+    res.redirect(url.originalUrl);
+  } catch (error) {
+    console.error("Error fetching URL from database:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(PORT, () => {
