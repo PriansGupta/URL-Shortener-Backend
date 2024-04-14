@@ -46,14 +46,21 @@ function toBase62(num) {
 app.post("/shorten", async (req, res) => {
   const { originalUrl } = req.body;
 
-  const uniqueId = Date.now();
-  const shortCode = toBase62(uniqueId);
-
   try {
-    const shortUrl = `${req.protocol}://${req.get("host")}/${shortCode}`;
-    const url = new URL({ originalUrl, shortUrl });
-    await url.save();
-    res.json({ shortUrl: shortUrl });
+    const existingUrl = await URL.findOne({ originalUrl });
+
+    if (existingUrl) {
+      res.json({ shortUrl: existingUrl.shortUrl });
+    } else {
+      const uniqueId = Date.now();
+      const shortCode = toBase62(uniqueId);
+      const shortUrl = `${req.protocol}://${req.get("host")}/${shortCode}`;
+
+      const url = new URL({ originalUrl, shortUrl });
+      await url.save();
+
+      res.json({ shortUrl });
+    }
   } catch (error) {
     console.error("Error saving URL to database:", error);
     res.status(500).json({ error: "Internal server error" });
