@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const PORT = "https://make-it-easyy.vercel.app";
+const PORT = process.env.PORT || 5000;
 
 mongoose
   .connect(
@@ -64,7 +64,7 @@ app.get("/:shortCode", async (req, res) => {
   const { shortCode } = req.params;
   try {
     const url = await URL.findOne({
-      shortUrl: `https://make-it-easyy/${shortCode}`,
+      shortUrl: `http://make-it-easyy.vercel.app/${shortCode}`,
     });
     if (!url) {
       return res.status(404).json({ error: "URL not found" });
@@ -77,5 +77,5 @@ app.get("/:shortCode", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
