@@ -59,7 +59,7 @@ app.post("/sign-in", async (req, res) => {
     if (user) {
       res.status(200).json({ user });
     } else {
-      const newUser = new User({ email: email, credits: 5 });
+      const newUser = new User({ email: email, credits: 10 });
       await newUser.save();
       res.status(200).json({ user });
     }
